@@ -1,6 +1,6 @@
-package lt.vpranckaitis.plc.request;
+package lt.vpranckaitis.plc.request.strategies;
 
-public class AuthenticationStrategy implements RequestStrategy {
+public class DeletePositionStrategy implements RequestStrategy {
 
 	@Override
 	public String handle(String query) {

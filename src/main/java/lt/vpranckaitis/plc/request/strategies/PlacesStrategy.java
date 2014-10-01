@@ -1,4 +1,4 @@
-package lt.vpranckaitis.plc.request;
+package lt.vpranckaitis.plc.request.strategies;
 
 public class PlacesStrategy implements RequestStrategy {
 
