@@ -6,7 +6,7 @@ public class InvalidRequest implements Request {
 
 	@Override
 	public String getResponse() {
-		return "{status: \"INVALID_REQUEST\"}";
+		return "{\n\tstatus: \"INVALID_REQUEST\"\n}";
 	}
 
 }

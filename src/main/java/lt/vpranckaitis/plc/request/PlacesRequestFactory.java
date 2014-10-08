@@ -17,8 +17,14 @@ public class PlacesRequestFactory implements RequestFactory {
 	@Override
 	public Request constructRequest(HttpMethod method, String uri,
 			String query, String content) {
-		
-		return null;
+		switch (method) {
+		case GET:
+			if (true) {
+				return new GetPlacesRequest(mPositionsDb, mPlacesDb);
+			}
+			break;
+		}
+		return new InvalidRequest();
 	}
 
 }
