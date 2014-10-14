@@ -27,7 +27,6 @@ public class PositionsRequestFactory implements RequestFactory {
 		case POST: {
 			Matcher m = Pattern.compile(URI_GET_ACCESS_KEY_PATTERN,
 					Pattern.CASE_INSENSITIVE).matcher(uri);
-			System.out.println(uri);
 			if (m.matches()) {
 				return new NewPositionRequest(mPositionsDb);
 			}
@@ -37,7 +36,7 @@ public class PositionsRequestFactory implements RequestFactory {
 			Matcher m = Pattern.compile(URI_UPDATE_POSITION_PATTERN,
 					Pattern.CASE_INSENSITIVE).matcher(uri);
 			if (m.matches()) {
-				return new UpdatePositionRequest(mPositionsDb);
+				return new UpdatePositionRequest(mPositionsDb, m.group(1));
 			}
 			break;
 		}
@@ -45,7 +44,7 @@ public class PositionsRequestFactory implements RequestFactory {
 			Matcher m = Pattern.compile(URI_UPDATE_POSITION_PATTERN,
 					Pattern.CASE_INSENSITIVE).matcher(uri);
 			if (m.matches()) {
-				return new DeletePositionRequest(mPositionsDb);
+				return new DeletePositionRequest(mPositionsDb, m.group(1));
 			}
 			break;
 		}

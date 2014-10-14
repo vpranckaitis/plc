@@ -4,8 +4,8 @@ import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class DeletePositionRequest extends PositionRequest {
 
-	public DeletePositionRequest(PositionDatabaseAdapter position) {
-		super(position);
+	public DeletePositionRequest(PositionDatabaseAdapter position, String key) {
+		super(position, key);
 	}
 
 	@Override

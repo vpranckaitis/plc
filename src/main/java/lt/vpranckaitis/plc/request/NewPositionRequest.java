@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class NewPositionRequest extends PositionRequest {
-
+	
 	public NewPositionRequest(PositionDatabaseAdapter position) {
-		super(position);
+		super(position, "");
 	}
 
 	@Override
@@ -25,5 +25,4 @@ public class NewPositionRequest extends PositionRequest {
 		}
 		return response;
 	}
-
 }
