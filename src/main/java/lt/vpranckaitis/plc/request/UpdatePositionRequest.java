@@ -1,10 +1,10 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 
 public class UpdatePositionRequest extends PositionRequest {
 
-	public UpdatePositionRequest(PositionDatabaseAdapter position, String key) {
+	public UpdatePositionRequest(PositionsDatabaseAdapter position, String key) {
 		super(position, key);
 	}
 

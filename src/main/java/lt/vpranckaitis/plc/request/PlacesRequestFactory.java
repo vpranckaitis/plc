@@ -1,15 +1,15 @@
 package lt.vpranckaitis.plc.request;
 
 import lt.vpranckaitis.plc.database.PlacesDatabaseAdapter;
-import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.transport.HttpMethod;
 
 public class PlacesRequestFactory implements RequestFactory {
 
-	private PositionDatabaseAdapter mPositionsDb;
+	private PositionsDatabaseAdapter mPositionsDb;
 	private PlacesDatabaseAdapter mPlacesDb;
 
-	public PlacesRequestFactory(PositionDatabaseAdapter positions,
+	public PlacesRequestFactory(PositionsDatabaseAdapter positions,
 			PlacesDatabaseAdapter places) {
 		mPositionsDb = positions;
 		mPlacesDb = places;
@@ -21,9 +21,8 @@ public class PlacesRequestFactory implements RequestFactory {
 		switch (method) {
 		case GET:
 			if (true) {
-				return new GetPlacesRequest(mPositionsDb, mPlacesDb);
+				return new GetPlacesRequest(mPositionsDb, mPlacesDb, 0.0, 0.0, null);
 			}
-			break;
 		}
 		return new InvalidRequest();
 	}

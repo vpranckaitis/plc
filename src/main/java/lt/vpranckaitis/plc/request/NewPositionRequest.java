@@ -5,11 +5,11 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 
 public class NewPositionRequest extends PositionRequest {
 	
-	public NewPositionRequest(PositionDatabaseAdapter position) {
+	public NewPositionRequest(PositionsDatabaseAdapter position) {
 		super(position, "");
 	}
 

@@ -3,7 +3,7 @@ package lt.vpranckaitis.plc.request;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.transport.HttpMethod;
 
 public class PositionsRequestFactory implements RequestFactory {
@@ -14,9 +14,9 @@ public class PositionsRequestFactory implements RequestFactory {
 			+ ACCESS_KEY_PATTERN + ")/?$";
 	private static final String URI_DELETE_POSITION_PATTERN = URI_UPDATE_POSITION_PATTERN;
 
-	private PositionDatabaseAdapter mPositionsDb;
+	private PositionsDatabaseAdapter mPositionsDb;
 
-	public PositionsRequestFactory(PositionDatabaseAdapter positions) {
+	public PositionsRequestFactory(PositionsDatabaseAdapter positions) {
 		mPositionsDb = positions;
 	}
 
