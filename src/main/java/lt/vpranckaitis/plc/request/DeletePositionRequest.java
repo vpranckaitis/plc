@@ -1,10 +1,10 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class DeletePositionRequest extends PositionRequest {
 
-	public DeletePositionRequest(DatabaseAdapter position) {
+	public DeletePositionRequest(PositionDatabaseAdapter position) {
 		super(position);
 	}
 

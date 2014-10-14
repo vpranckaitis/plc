@@ -1,15 +1,19 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public abstract class PositionRequest implements Request {
 
-	private DatabaseAdapter mPositionDatabase;
+	private PositionDatabaseAdapter mPositionDatabase;
 	
-	public PositionRequest(DatabaseAdapter position) {
+	public PositionRequest(PositionDatabaseAdapter position) {
 		mPositionDatabase = position;
 	}
 	
 	@Override
 	public abstract String getResponse();
+	
+	protected PositionDatabaseAdapter getPositionDatabase() {
+		return mPositionDatabase;
+	}
 }

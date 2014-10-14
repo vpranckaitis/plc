@@ -1,16 +1,29 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import java.util.UUID;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class NewPositionRequest extends PositionRequest {
 
-	public NewPositionRequest(DatabaseAdapter position) {
+	public NewPositionRequest(PositionDatabaseAdapter position) {
 		super(position);
 	}
 
 	@Override
 	public String getResponse() {
-		return "{\n\tstatus:\"OK\",\n\tkey: \"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\"\n\t/*Generate new key, insert into database, return key*/\n}";
+		String key = UUID.randomUUID().toString();
+		getPositionDatabase().createPosition(key);
+		String response = "";
+		try {
+			response = new JSONObject().put("status", "OK").put("key", key).toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 }

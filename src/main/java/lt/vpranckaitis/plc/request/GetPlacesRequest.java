@@ -1,13 +1,14 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PlacesDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class GetPlacesRequest implements Request {
 
-	private DatabaseAdapter mPositionDatabase;
-	private DatabaseAdapter mPlacesDatabase;
+	private PositionDatabaseAdapter mPositionDatabase;
+	private PlacesDatabaseAdapter mPlacesDatabase;
 
-	public GetPlacesRequest(DatabaseAdapter position, DatabaseAdapter places) {
+	public GetPlacesRequest(PositionDatabaseAdapter position, PlacesDatabaseAdapter places) {
 		mPositionDatabase = position;
 		mPlacesDatabase = places;
 	}

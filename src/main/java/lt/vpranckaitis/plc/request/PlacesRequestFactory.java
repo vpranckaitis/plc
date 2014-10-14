@@ -1,15 +1,16 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PlacesDatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 import lt.vpranckaitis.plc.transport.HttpMethod;
 
 public class PlacesRequestFactory implements RequestFactory {
 
-	private DatabaseAdapter mPositionsDb;
-	private DatabaseAdapter mPlacesDb;
+	private PositionDatabaseAdapter mPositionsDb;
+	private PlacesDatabaseAdapter mPlacesDb;
 
-	public PlacesRequestFactory(DatabaseAdapter positions,
-			DatabaseAdapter places) {
+	public PlacesRequestFactory(PositionDatabaseAdapter positions,
+			PlacesDatabaseAdapter places) {
 		mPositionsDb = positions;
 		mPlacesDb = places;
 	}

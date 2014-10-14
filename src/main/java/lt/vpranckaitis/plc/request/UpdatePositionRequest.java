@@ -1,10 +1,10 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class UpdatePositionRequest extends PositionRequest {
 
-	public UpdatePositionRequest(DatabaseAdapter position) {
+	public UpdatePositionRequest(PositionDatabaseAdapter position) {
 		super(position);
 		// TODO Auto-generated constructor stub
 	}

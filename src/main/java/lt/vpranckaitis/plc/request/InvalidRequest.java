@@ -1,6 +1,6 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.DatabaseAdapter;
+import lt.vpranckaitis.plc.database.PositionDatabaseAdapter;
 
 public class InvalidRequest implements Request {
 
