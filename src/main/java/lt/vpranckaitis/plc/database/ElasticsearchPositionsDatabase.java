@@ -7,18 +7,23 @@ import java.util.List;
 
 import lt.vpranckaitis.plc.geo.Place;
 
-import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.count.CountRequestBuilder;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.FilterBuilder;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
-import org.json.JSONObject;
 
 public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter {
 	
-	private Node mNode;
 	private Client mClient;
 	
 	public ElasticsearchPositionsDatabase() {
@@ -26,8 +31,12 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 	}
 	
 	public ElasticsearchPositionsDatabase(boolean local) {
-		mNode = nodeBuilder().client(true).local(local).node();
-		mClient = mNode.client();
+		Node node = nodeBuilder().client(true).local(local).node();
+		mClient = node.client();
+	}
+	
+	public ElasticsearchPositionsDatabase(Client client) {
+		mClient = client;
 	}
 	
 	@Override
@@ -36,7 +45,8 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 	}
 
 	@Override
-	public void updatePosition(String key, double latitude, double longitude) {
+	public boolean updatePosition(String key, double latitude, double longitude) {
+		UpdateResponse response;
 		try {
 			XContentBuilder source = XContentFactory.jsonBuilder().startObject()
 					.startObject("location")
@@ -44,44 +54,52 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 					.field("lon", longitude)
 					.endObject()
 					.endObject();
-			UpdateResponse response = mClient.prepareUpdate("positions", "position", key)
-					.setSource(source).execute().actionGet();
+			response = mClient.prepareUpdate("positions", "position", key)
+					.setSource(source).get();
+			return response.isCreated();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	@Override
 	public boolean createPosition(String key) {
+		XContentBuilder source = null;
 		try {
-			
-			XContentBuilder source = XContentFactory.jsonBuilder().startObject()
+			source = XContentFactory.jsonBuilder().startObject()
 					.startObject("location")
 					.field("lat", 0.0)
 					.field("lon", 0.0)
 					.endObject()
-					.endObject();
-			System.out.println(key);
-			System.out.println(source.toString());
-			IndexResponse response = mClient.prepareIndex("positions", "position", key).setSource(source).execute().actionGet();
+					.endObject();	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return true;
+		IndexResponse response = mClient.prepareIndex("positions", "position", key).setSource(source).get();
+		return response.isCreated();
 	}
 
 	@Override
-	public void deletePosition(String key) {
-		// TODO Auto-generated method stub
-
+	public boolean deletePosition(String key) {
+		DeleteResponse response = mClient.prepareDelete("positions", "position", key)
+				.execute().actionGet();
+		return response.isFound();
 	}
 
 	@Override
 	public void updatePlacesWithProximity(List<Place> places) {
-		// TODO Auto-generated method stub
-
+		BulkRequestBuilder bulkRequest = mClient.prepareBulk();
+		for (Place place : places) {
+			FilterBuilder filter = FilterBuilders
+					.geoDistanceFilter("position.location")
+					.distance("250m")
+					.point(place.latitude, place.longitude);
+			FilteredQueryBuilder query = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), filter);
+			CountRequestBuilder countRequest = mClient.prepareCount("positions").setQuery(query);
+			System.out.println(countRequest.get().getCount());
+		}
 	}
 
 }

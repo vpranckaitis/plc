@@ -11,16 +11,16 @@ public class EmptyPositionsDatabase implements PositionsDatabaseAdapter {
 		return false;
 	}
 
-	public void updatePosition(String key, double latitude, double longitude) {
-		
+	public boolean updatePosition(String key, double latitude, double longitude) {
+		return true;
 	}
 
 	public boolean createPosition(String key) {
 		return false;
 	}
 
-	public void deletePosition(String key) {
-		
+	public boolean deletePosition(String key) {
+		return true;
 	}
 
 	public void updatePlacesWithProximity(List<Place> places) {
