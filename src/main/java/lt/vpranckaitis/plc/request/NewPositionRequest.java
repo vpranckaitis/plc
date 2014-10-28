@@ -19,7 +19,7 @@ public class NewPositionRequest extends PositionRequest {
 		getPositionDatabase().createPosition(key);
 		String response = "";
 		try {
-			response = new JSONObject().put("status", "OK").put("key", key).toString();
+			response = new JSONObject().put("status", "OK").put("key", key).put("comment", "You've got the key").toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

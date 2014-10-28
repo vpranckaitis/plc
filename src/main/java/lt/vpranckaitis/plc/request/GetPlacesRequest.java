@@ -26,7 +26,7 @@ public class GetPlacesRequest implements Request {
 
 	@Override
 	public String getResponse() {
-		return "{\n\tstatus:\"OK\",\n\t /*Get places according to filters, count the value of proximity of users around places, return list of places ordered by proximity*/\n}";
+		return "{\n\t\"status\":\"OK\",\n\t \"comment\":\"Get places from Google Places API, count proximity, return results\"\n}";
 	}
 	
 	@Override

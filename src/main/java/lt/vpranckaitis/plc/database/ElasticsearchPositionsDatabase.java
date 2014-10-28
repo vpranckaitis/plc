@@ -3,11 +3,11 @@ package lt.vpranckaitis.plc.database;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import lt.vpranckaitis.plc.geo.Place;
 
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.count.CountRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -16,6 +16,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.engine.DocumentMissingException;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
@@ -46,7 +47,6 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 
 	@Override
 	public boolean updatePosition(String key, double latitude, double longitude) {
-		UpdateResponse response;
 		try {
 			XContentBuilder source = XContentFactory.jsonBuilder().startObject()
 					.startObject("location")
@@ -54,13 +54,15 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 					.field("lon", longitude)
 					.endObject()
 					.endObject();
-			response = mClient.prepareUpdate("positions", "position", key)
-					.setSource(source).get();
-			return response.isCreated();
+			mClient.prepareUpdate("positions", "position", key)
+					.setDoc(source).get();
+		} catch (DocumentMissingException e) {
+			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		return false;
+			return false;
+		} 
+		return true;
 	}
 
 	@Override
@@ -89,17 +91,24 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 	}
 
 	@Override
-	public void updatePlacesWithProximity(List<Place> places) {
-		BulkRequestBuilder bulkRequest = mClient.prepareBulk();
+	public List<Long> getProximity(List<Place> places) {
+		List<Long> proximity = new ArrayList<>();
 		for (Place place : places) {
-			FilterBuilder filter = FilterBuilders
+			FilterBuilder distanceFilter = FilterBuilders
 					.geoDistanceFilter("position.location")
 					.distance("250m")
+					.geoDistance(GeoDistance.SLOPPY_ARC)
 					.point(place.latitude, place.longitude);
+			FilterBuilder timestampFilter = FilterBuilders
+					.rangeFilter("position._timestamp")
+					.from("now-30m");
+			FilterBuilder filter = FilterBuilders
+					.andFilter(distanceFilter, timestampFilter);
 			FilteredQueryBuilder query = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), filter);
 			CountRequestBuilder countRequest = mClient.prepareCount("positions").setQuery(query);
-			System.out.println(countRequest.get().getCount());
+			proximity.add(countRequest.get().getCount());
 		}
+		return proximity;
 	}
 
 }

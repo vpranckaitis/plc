@@ -15,12 +15,12 @@ public class PlcService {
 		Server server = new Server(8080);
 		server.setRequestListener(new RequestHandler());
 		
-		GooglePlacesDatabase g = new GooglePlacesDatabase(Constants.GOOGLE_PLACES_API_KEY);
+		/*GooglePlacesDatabase g = new GooglePlacesDatabase(Constants.GOOGLE_PLACES_API_KEY);
 		List<Place> pl = g.getPlaces(54.904262, 23.958592, Constants.RADIUS_FOR_PLACES, null);
 		System.out.println(pl.size());
 		for (Place p : pl) {
 			System.out.println(p.toString());
-		}
+		}*/
 	}
 	
 	public static void doSomeLogging(PrintStream out) {

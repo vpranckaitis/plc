@@ -9,5 +9,5 @@ public interface PositionsDatabaseAdapter {
 	public boolean updatePosition(String key, double latitude, double longitude);
 	public boolean createPosition(String key);
 	public boolean deletePosition(String key);
-	public void updatePlacesWithProximity(List<Place> places);
+	public List<Long> getProximity(List<Place> places);
 }

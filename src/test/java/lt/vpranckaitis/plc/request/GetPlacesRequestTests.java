@@ -20,7 +20,7 @@ public class GetPlacesRequestTests {
 
 	@Test
 	public void testGetResponse() throws Exception {
-		
+		throw new RuntimeException("not yet implemented");
 	}
 
 }

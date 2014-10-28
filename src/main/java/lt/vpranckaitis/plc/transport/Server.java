@@ -45,6 +45,9 @@ public class Server implements Closeable {
 
 					response.setValue("Content-Type", "text/plain");
 					response.setValue("Server", "PlcServer/1.0");
+					response.setValue("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+					response.setValue("Access-Control-Allow-Header", "content-type");
+					response.setValue("Access-Control-Allow-Origin", "*");
 					response.setDate("Date", time);
 					response.setDate("Last-Modified", time);
 					String message = "";

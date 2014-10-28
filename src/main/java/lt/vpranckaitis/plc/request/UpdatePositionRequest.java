@@ -10,7 +10,7 @@ public class UpdatePositionRequest extends PositionRequest {
 
 	@Override
 	public String getResponse() {
-		return "{\n\tstatus:\"OK\",\n\t /*Check if key exists, update position*/\n}";
+		return "{\n\t\"status\":\"OK\",\n\t \"comment\":\"Check if key exists, location info for given key\"\n}";
 	}
 
 }

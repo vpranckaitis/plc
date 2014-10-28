@@ -1,5 +1,7 @@
 package lt.vpranckaitis.plc.request;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
@@ -23,8 +25,9 @@ public class EmptyPositionsDatabase implements PositionsDatabaseAdapter {
 		return true;
 	}
 
-	public void updatePlacesWithProximity(List<Place> places) {
-		
+	@Override
+	public List<Long> getProximity(List<Place> places) {
+		return Collections.nCopies(places.size(), new Long(0));
 	}
 
 }

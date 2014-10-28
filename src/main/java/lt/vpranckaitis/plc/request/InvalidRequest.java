@@ -1,12 +1,11 @@
 package lt.vpranckaitis.plc.request;
 
-import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 
 public class InvalidRequest implements Request {
 
 	@Override
 	public String getResponse() {
-		return "{\n\tstatus: \"INVALID_REQUEST\"\n}";
+		return "{\n\t\"status\":\"INVALID_REQUEST\",\n\t \"comment\":\"Something is wrong with the request\"\n}";
 	}
 
 	@Override

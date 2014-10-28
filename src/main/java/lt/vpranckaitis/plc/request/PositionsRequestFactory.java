@@ -41,7 +41,7 @@ public class PositionsRequestFactory implements RequestFactory {
 			break;
 		}
 		case DELETE: {
-			Matcher m = Pattern.compile(URI_UPDATE_POSITION_PATTERN,
+			Matcher m = Pattern.compile(URI_DELETE_POSITION_PATTERN,
 					Pattern.CASE_INSENSITIVE).matcher(uri);
 			if (m.matches()) {
 				return new DeletePositionRequest(mPositionsDb, m.group(1));

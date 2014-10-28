@@ -10,7 +10,7 @@ public class DeletePositionRequest extends PositionRequest {
 
 	@Override
 	public String getResponse() {
-		return "{\n\tstatus:\"OK\",\n\t /*Check if key exists, delete key from database*/\n}";
+		return "{\n\t\"status\":\"OK\",\n\t \"comment\":\"Check if key exists, delete key from database\"\n}";
 	}
 
 }
