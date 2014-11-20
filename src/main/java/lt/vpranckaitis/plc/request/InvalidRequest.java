@@ -1,11 +1,18 @@
 package lt.vpranckaitis.plc.request;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+
 
 public class InvalidRequest implements Request {
 
 	@Override
 	public String getResponse() {
-		return "{\n\t\"status\":\"INVALID_REQUEST\",\n\t \"comment\":\"Something is wrong with the request\"\n}";
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("status", "400");
+		return new JSONObject(response).toString();
 	}
 
 	@Override

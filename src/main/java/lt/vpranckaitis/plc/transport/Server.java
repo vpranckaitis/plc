@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.URLDecoder;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -39,17 +40,18 @@ public class Server implements Closeable {
 		@Override
 		public void handle(Request request, Response response) {
 			try {
+				long time = System.currentTimeMillis();
+				response.setValue("Content-Type", "text/plain; charset=UTF-8");
+				response.setValue("Server", "PlcServer/1.0");
+				response.setValue("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+				response.setValue("Access-Control-Allow-Headers", "origin, content-type, accept");
+				response.setValue("Access-Control-Allow-Origin", "*");
+				response.setDate("Date", time);
+				response.setDate("Last-Modified", time);
+				
 				PrintStream body = response.getPrintStream();
 				if (mRequestListener != null) {
-					long time = System.currentTimeMillis();
-
-					response.setValue("Content-Type", "text/plain");
-					response.setValue("Server", "PlcServer/1.0");
-					response.setValue("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-					response.setValue("Access-Control-Allow-Header", "content-type");
-					response.setValue("Access-Control-Allow-Origin", "*");
-					response.setDate("Date", time);
-					response.setDate("Last-Modified", time);
+					
 					String message = "";
 					HttpMethod method;
 					switch (request.getMethod().toLowerCase()) {
@@ -68,9 +70,10 @@ public class Server implements Closeable {
 					default:
 						method = HttpMethod.UNKNOWN;
 					}
-					body.print(mRequestListener.handleRequest(method, request
-							.getPath().getPath(),
-							request.getQuery().toString(), request.getContent()));
+					String path = URLDecoder.decode(request.getPath().getPath(), "UTF-8");
+					String query = URLDecoder.decode(request.getQuery().toString(), "UTF-8");
+					String content = request.getContent();
+					body.print(notifyListener(method, path, query, content));
 				} else {
 					body.println("Server won't process any requests");
 				}
@@ -78,6 +81,14 @@ public class Server implements Closeable {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		public String notifyListener(HttpMethod method, String uri, String query, String content) {
+			if (mRequestListener != null) {
+				return mRequestListener.handleRequest(method, uri,
+						query, content);
+			} 
+			return "";
 		}
 		
 	}

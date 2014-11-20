@@ -9,5 +9,4 @@ public abstract class DatabaseCommand implements Command {
 	public DatabaseCommand(PositionsDatabaseAdapter database) {
 		mDatabase = database;
 	}
-
 }

@@ -1,5 +1,7 @@
 package lt.vpranckaitis.plc.request;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -17,12 +19,9 @@ public class NewPositionRequest extends PositionRequest {
 	public String getResponse() {
 		String key = UUID.randomUUID().toString();
 		getPositionDatabase().createPosition(key);
-		String response = "";
-		try {
-			response = new JSONObject().put("status", "OK").put("key", key).put("comment", "You've got the key").toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return response;
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("status", "201");
+		response.put("key", key);
+		return new JSONObject(response).toString();
 	}
 }

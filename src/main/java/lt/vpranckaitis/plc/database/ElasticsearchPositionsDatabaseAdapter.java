@@ -6,14 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lt.vpranckaitis.plc.Constants;
 import lt.vpranckaitis.plc.geo.Place;
 
 import org.elasticsearch.action.count.CountRequestBuilder;
+import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.geo.GeoDistance;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.engine.DocumentMissingException;
@@ -23,20 +25,20 @@ import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 
-public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter {
+public class ElasticsearchPositionsDatabaseAdapter implements PositionsDatabaseAdapter {
 	
 	private Client mClient;
 	
-	public ElasticsearchPositionsDatabase() {
+	public ElasticsearchPositionsDatabaseAdapter() {
 		this(false);
 	}
 	
-	public ElasticsearchPositionsDatabase(boolean local) {
+	public ElasticsearchPositionsDatabaseAdapter(boolean local) {
 		Node node = nodeBuilder().client(true).local(local).node();
 		mClient = node.client();
 	}
 	
-	public ElasticsearchPositionsDatabase(Client client) {
+	public ElasticsearchPositionsDatabaseAdapter(Client client) {
 		mClient = client;
 	}
 	
@@ -96,9 +98,10 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 		for (Place place : places) {
 			FilterBuilder distanceFilter = FilterBuilders
 					.geoDistanceFilter("position.location")
-					.distance("250m")
-					.geoDistance(GeoDistance.SLOPPY_ARC)
-					.point(place.latitude, place.longitude);
+					.point(place.latitude, place.longitude)
+					.distance(Constants.RADIUS_FOR_PEOPLE, DistanceUnit.METERS)
+					.geoDistance(GeoDistance.SLOPPY_ARC);
+					
 			FilterBuilder timestampFilter = FilterBuilders
 					.rangeFilter("position._timestamp")
 					.from("now-30m");
@@ -106,7 +109,8 @@ public class ElasticsearchPositionsDatabase implements PositionsDatabaseAdapter 
 					.andFilter(distanceFilter, timestampFilter);
 			FilteredQueryBuilder query = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), filter);
 			CountRequestBuilder countRequest = mClient.prepareCount("positions").setQuery(query);
-			proximity.add(countRequest.get().getCount());
+			CountResponse response = countRequest.get();
+			proximity.add(response.getCount());
 		}
 		return proximity;
 	}

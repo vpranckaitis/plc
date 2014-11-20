@@ -7,7 +7,7 @@ import java.util.List;
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.geo.Place;
 
-public class EmptyPositionsDatabase implements PositionsDatabaseAdapter {
+public class EmptyPositionsDatabaseAdapter implements PositionsDatabaseAdapter {
 
 	public boolean checkKeyExists(String key) {
 		return false;

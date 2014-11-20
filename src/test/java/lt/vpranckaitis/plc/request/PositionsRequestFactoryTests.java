@@ -13,13 +13,13 @@ public class PositionsRequestFactoryTests {
 	
 	@Before
 	public void setUp() throws Exception {
-		mFactory = new PositionsRequestFactory(new EmptyPositionsDatabase());
+		mFactory = new PositionsRequestFactory(new EmptyPositionsDatabaseAdapter());
 	}
 	
 	@Test
 	public void newPositionRequest_shouldReturnNewPositionRequestObject() {
 		Request actual = mFactory.constructRequest(HttpMethod.POST, "/positions/", "", "");
-		Request expected = new NewPositionRequest(new EmptyPositionsDatabase());
+		Request expected = new NewPositionRequest(new EmptyPositionsDatabaseAdapter());
 		assertEquals(expected, actual);
 	}
 	
@@ -51,7 +51,7 @@ public class PositionsRequestFactoryTests {
 		String query = "";
 		String content = "{\"location\" : {\"lat\" : 0.0, \"lon\" : 0.0}}";
 		Request actual = mFactory.constructRequest(HttpMethod.PUT, uri, query, content);
-		Request expected = new UpdatePositionRequest(new EmptyPositionsDatabase(), key);
+		Request expected = new UpdatePositionRequest(new EmptyPositionsDatabaseAdapter(), key, 0.0, 0.0);
 		assertEquals(expected, actual);
 	}
 	
@@ -62,7 +62,7 @@ public class PositionsRequestFactoryTests {
 		String query = "";
 		String content = "";
 		Request actual = mFactory.constructRequest(HttpMethod.DELETE, uri, query, content);
-		Request expected = new DeletePositionRequest(new EmptyPositionsDatabase(), key);
+		Request expected = new DeletePositionRequest(new EmptyPositionsDatabaseAdapter(), key);
 		assertEquals(expected, actual);
 	}
 }

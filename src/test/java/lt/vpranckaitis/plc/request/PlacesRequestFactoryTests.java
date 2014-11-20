@@ -21,8 +21,8 @@ public class PlacesRequestFactoryTests {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		mPositionsDb = new EmptyPositionsDatabase();
-		mPlacesDb = new EmptyPlacesDatabase();
+		mPositionsDb = new EmptyPositionsDatabaseAdapter();
+		mPlacesDb = new EmptyPlacesDatabaseAdapter();
 	}
 	
 	@Before
@@ -39,13 +39,13 @@ public class PlacesRequestFactoryTests {
 		String content = "";
 		List<String> types = new ArrayList<String>() {{add("school"); add("establishment");}};
 		Request actual = mFactory.constructRequest(method, uri, query, content);
-		Request expected = new GetPlacesRequest(mPositionsDb, mPlacesDb, 0.1, 0.2, types);
+		Request expected = new GetPlacesRequest(mPositionsDb, mPlacesDb, key, 0.1, 0.2, types);
 		assertEquals(expected, actual);
 	}
 	
 	@Test
 	public void getPlacesRequestPostMethod_shouldReturnInvalidRequest() throws Exception {
-		HttpMethod method = HttpMethod.GET;
+		HttpMethod method = HttpMethod.POST;
 		String key = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 		String uri = "/places/" + key;
 		String query = "lat=0.1&lon=0.2&types=establishment|school";
@@ -112,6 +112,19 @@ public class PlacesRequestFactoryTests {
 		String content = "";
 		Request actual = mFactory.constructRequest(method, uri, query, content);
 		Request expected = new InvalidRequest();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void getPlacesRequestParametersReordered_shouldReturnGetPlacesRequest() throws Exception {
+		HttpMethod method = HttpMethod.GET;
+		String key = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
+		String uri = "/places/" + key;
+		String query = "lon=0.2&types=establishment|school&lat=0.1";
+		String content = "";
+		List<String> types = new ArrayList<String>() {{add("school"); add("establishment");}};
+		Request actual = mFactory.constructRequest(method, uri, query, content);
+		Request expected = new GetPlacesRequest(mPositionsDb, mPlacesDb, key, 0.1, 0.2, types);
 		assertEquals(expected, actual);
 	}
 	

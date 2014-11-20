@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lt.vpranckaitis.plc.Constants;
-import lt.vpranckaitis.plc.database.ElasticsearchPositionsDatabase;
-import lt.vpranckaitis.plc.database.GooglePlacesDatabase;
+import lt.vpranckaitis.plc.database.ElasticsearchPositionsDatabaseAdapter;
+import lt.vpranckaitis.plc.database.GooglePlacesDatabaseAdapter;
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.transport.HttpMethod;
 import lt.vpranckaitis.plc.transport.RequestListener;
@@ -16,10 +16,10 @@ public class RequestHandler implements RequestListener {
 	private RequestFactory mPlacesFactory;
 	
 	public RequestHandler() {
-		mPositionsFactory = new PositionsRequestFactory(new ElasticsearchPositionsDatabase());
+		mPositionsFactory = new PositionsRequestFactory(new ElasticsearchPositionsDatabaseAdapter());
 		mPlacesFactory = new PlacesRequestFactory(
-				new ElasticsearchPositionsDatabase(),
-				new GooglePlacesDatabase(Constants.GOOGLE_PLACES_API_KEY)
+				new ElasticsearchPositionsDatabaseAdapter(),
+				new GooglePlacesDatabaseAdapter(Constants.GOOGLE_PLACES_API_KEY)
 				);
 	}
 
@@ -34,8 +34,6 @@ public class RequestHandler implements RequestListener {
 	
 	private RequestFactory chooseRequestFactory(String uri) {
 		Matcher m = Pattern.compile("^/([a-z]+)/?", Pattern.CASE_INSENSITIVE).matcher(uri);
-		System.out.println(uri);
-		System.out.println(m.toString());
 		if (m.find()) {
 			switch (m.group(1).toLowerCase()) {
 			case "positions":

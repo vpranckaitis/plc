@@ -8,10 +8,12 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class Scheduler {
+	private TreeMap<Calendar, List<Command>> mHistory;
 	private TreeMap<Calendar, List<Command>> mSchedule;
 	
 	public Scheduler() {
 		mSchedule = new TreeMap<Calendar, List<Command>>();
+		mHistory = new TreeMap<Calendar, List<Command>>();
 	}
 	
 	public void addCommand(Calendar date, Command command) {
@@ -28,6 +30,7 @@ public class Scheduler {
 				c.execute();
 			}
 		}
+		mHistory.putAll(mSchedule.headMap(current, true));
 		mSchedule.keySet().removeAll(mSchedule.headMap(current, true).keySet());
 	}
 }

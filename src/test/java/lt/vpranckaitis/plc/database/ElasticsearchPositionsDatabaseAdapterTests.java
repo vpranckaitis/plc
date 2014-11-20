@@ -24,14 +24,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ElasticsearchPositionsDatabaseTests {
+public class ElasticsearchPositionsDatabaseAdapterTests {
 
-	private static ElasticsearchPositionsDatabase sDb;
+	private static ElasticsearchPositionsDatabaseAdapter sDb;
 	private static Client sClient;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		sClient = NodeBuilder.nodeBuilder().local(false).node().client();
+		sClient = NodeBuilder.nodeBuilder().clusterName("test-database").local(false).node().client();
 		
 	}
 
@@ -64,7 +64,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		long[] timeDiffs = {0, 0, 0, 0, 0};
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		List<Long> actual = db.getProximity(places);
 		List<Long> expected = Arrays.asList(new Long[]{3l, 3l, 0l});
 		assertEquals(expected, actual);
@@ -92,7 +92,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		long[] timeDiffs = {-35*60*1000, -30*60*1000, -28*60*1000, -15*60*1000, 0};
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		List<Long> actual = db.getProximity(places);
 		List<Long> expected = Arrays.asList(new Long[]{3l});
 		assertEquals(expected, actual);
@@ -129,7 +129,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		Boolean[] expecteds = new Boolean[] {true, true, false, false};
 		Boolean[] actuals = new Boolean[checkedKeys.length];
 		
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		for (int i = 0; i < checkedKeys.length; i++) {
 			actuals[i] = db.checkKeyExists(checkedKeys[i]);
 		}
@@ -147,7 +147,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
 		
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		String updateKey = keys[0];
 		boolean isUpdatedActual = db.updatePosition(updateKey, 1.0, 1.0);
 		boolean isUpdatedExpected = true;
@@ -169,7 +169,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
 		
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		String updateKey = "badkey00-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 		boolean isUpdatedActual = db.updatePosition(updateKey, 1.0, 1.0);
 		boolean isUpdatedExpected = false;
@@ -192,7 +192,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
 		
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		String deleteKey = keys[0];
 		boolean isDeletedActual = db.deletePosition(deleteKey);
 		boolean isDeletedExpected = true;
@@ -215,7 +215,7 @@ public class ElasticsearchPositionsDatabaseTests {
 		addPositions(keys, lats, lons, timeDiffs);
 		Thread.sleep(2000);
 		
-		ElasticsearchPositionsDatabase db = new ElasticsearchPositionsDatabase(sClient);
+		ElasticsearchPositionsDatabaseAdapter db = new ElasticsearchPositionsDatabaseAdapter(sClient);
 		String deleteKey = "badkey00-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 		boolean isDeletedActual = db.deletePosition(deleteKey);
 		boolean isDeletedExpected = false;

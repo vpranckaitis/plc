@@ -16,11 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GooglePlacesDatabase implements PlacesDatabaseAdapter {
+public class GooglePlacesDatabaseAdapter implements PlacesDatabaseAdapter {
 
 	private GooglePlacesHelper mPlacesHelper;
 	
-	public GooglePlacesDatabase(String apiKey) {
+	public GooglePlacesDatabaseAdapter(String apiKey) {
 		mPlacesHelper = new GooglePlacesHelper(apiKey);
 	}
 	
@@ -30,8 +30,6 @@ public class GooglePlacesDatabase implements PlacesDatabaseAdapter {
 		String response = mPlacesHelper.makeRequest(latitude, longtitude, radius, types);
 		List<Place> places = new LinkedList<>();
 		if (mPlacesHelper.isStatusOk(response)) {
-			System.out.println("status ok");
-			System.out.println(mPlacesHelper.parsePlaces(response).size());
 			places.addAll(mPlacesHelper.parsePlaces(response));
 			String pageToken;
 			while ((pageToken = mPlacesHelper.getPageToken(response)) != null) {
@@ -76,19 +74,11 @@ public class GooglePlacesDatabase implements PlacesDatabaseAdapter {
 		}
 		
 		public String makeRequest(String pageToken) {
-			
 			String query = String.format(Locale.ENGLISH, QUERY_PAGE_FORMAT, pageToken, mApiKey);
 			return performRequest(query);
 		}
 		
 		private String performRequest(String url) {
-			System.out.println(url);
-			try {
-				System.out.println(new URL(url).toString());
-			} catch (MalformedURLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			BufferedReader resultReader = null;
 			StringBuilder result = new StringBuilder();
 			try {
@@ -99,7 +89,6 @@ public class GooglePlacesDatabase implements PlacesDatabaseAdapter {
 					result.append(line);
 					result.append('\n');
 				}
-				System.out.println(result.toString());
 			} catch (Exception e) {
 				
 			} finally {

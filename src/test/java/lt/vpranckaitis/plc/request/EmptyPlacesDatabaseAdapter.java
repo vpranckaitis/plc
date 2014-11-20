@@ -5,7 +5,7 @@ import java.util.List;
 import lt.vpranckaitis.plc.database.PlacesDatabaseAdapter;
 import lt.vpranckaitis.plc.geo.Place;
 
-public class EmptyPlacesDatabase implements PlacesDatabaseAdapter {
+public class EmptyPlacesDatabaseAdapter implements PlacesDatabaseAdapter {
 
 	@Override
 	public List<Place> getPlaces(double latitude, double longtitude,

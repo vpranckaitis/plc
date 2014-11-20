@@ -6,7 +6,7 @@ import java.util.List;
 
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.geo.Place;
-import lt.vpranckaitis.plc.request.EmptyPositionsDatabase;
+import lt.vpranckaitis.plc.request.EmptyPositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.request.RequestHandler;
 import lt.vpranckaitis.plc.scheduler.BackupDatabaseCommand;
 import lt.vpranckaitis.plc.scheduler.CleanDatabaseCommand;
@@ -19,7 +19,7 @@ public class PlcService {
 	public static void main(String[] list) throws Exception {
 		PlcService service = new PlcService();
 		Server server = new Server(8080);
-		//server.setRequestListener(new RequestHandler());
+		server.setRequestListener(new RequestHandler());
 		
 		/*GooglePlacesDatabase g = new GooglePlacesDatabase(Constants.GOOGLE_PLACES_API_KEY);
 		List<Place> pl = g.getPlaces(54.904262, 23.958592, Constants.RADIUS_FOR_PLACES, null);
@@ -28,6 +28,7 @@ public class PlcService {
 			System.out.println(p.toString());
 		}*/
 		
+		/*
 		demoScheduler(new PositionsDatabaseAdapter() {
 			@Override 
 			public boolean updatePosition(String key, double latitude, double longitude) { return false; }
@@ -39,7 +40,7 @@ public class PlcService {
 			public boolean createPosition(String key) { return false; }
 			@Override
 			public boolean checkKeyExists(String key) { return false; }
-		});
+		});*/
 	}
 	
 	public static void doSomeLogging(PrintStream out) {
