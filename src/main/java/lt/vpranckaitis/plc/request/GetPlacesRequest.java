@@ -13,6 +13,7 @@ import lt.vpranckaitis.plc.Constants;
 import lt.vpranckaitis.plc.database.PlacesDatabaseAdapter;
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.geo.Place;
+import lt.vpranckaitis.plc.transport.ResponseData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,10 +40,11 @@ public class GetPlacesRequest implements Request {
 	}
 
 	@Override
-	public String getResponse() {
+	public ResponseData getResponse() {
 		Map<String, String> response = new HashMap<String, String>();
+		ResponseData responseData = new ResponseData();
 		if (!mPositionDatabase.checkKeyExists(mKey)) {
-			response.put("status", "404");
+			responseData.setStatus(404);
 		} else {
 			List<Place> places = mPlacesDatabase.getPlaces(mLatitude, mLongitude, Constants.RADIUS_FOR_PLACES, (mTypes != null ? mTypes.toArray(new String[1]) : null));
 			Iterator<Place> placesIt = places.iterator();
@@ -51,7 +53,7 @@ public class GetPlacesRequest implements Request {
 			}
 			JSONObject responseJSON = new JSONObject();
 			try {
-				responseJSON.put("status", "200");
+				responseData.setStatus(200);
 				JSONArray results = new JSONArray();
 				
 				Collections.sort(places);
@@ -66,13 +68,13 @@ public class GetPlacesRequest implements Request {
 					results.put(new JSONObject(placeInfo));
 				}
 				responseJSON.put("results", results);
-				return responseJSON.toString();
+				responseData.setResponseBody(responseJSON.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
-				response.put("status", "500");
+				responseData.setStatus(500);
 			}
 		}
-		return new JSONObject(response).toString();
+		return responseData;
 	}
 	
 	@Override

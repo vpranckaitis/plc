@@ -9,6 +9,7 @@ import lt.vpranckaitis.plc.database.GooglePlacesDatabaseAdapter;
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
 import lt.vpranckaitis.plc.transport.HttpMethod;
 import lt.vpranckaitis.plc.transport.RequestListener;
+import lt.vpranckaitis.plc.transport.ResponseData;
 
 public class RequestHandler implements RequestListener {
 	
@@ -24,7 +25,7 @@ public class RequestHandler implements RequestListener {
 	}
 
 	@Override
-	public String handleRequest(HttpMethod method, String uri, String query, String content) {
+	public ResponseData handleRequest(HttpMethod method, String uri, String query, String content) {
 		RequestFactory factory = chooseRequestFactory(uri);
 		if (factory != null) {
 			return factory.constructRequest(method, uri, query, content).getResponse();

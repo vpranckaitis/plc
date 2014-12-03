@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
+import lt.vpranckaitis.plc.transport.ResponseData;
 
 public class NewPositionRequest extends PositionRequest {
 	
@@ -16,12 +17,11 @@ public class NewPositionRequest extends PositionRequest {
 	}
 
 	@Override
-	public String getResponse() {
+	public ResponseData getResponse() {
 		String key = UUID.randomUUID().toString();
 		getPositionDatabase().createPosition(key);
 		Map<String, String> response = new HashMap<String, String>();
-		response.put("status", "201");
 		response.put("key", key);
-		return new JSONObject(response).toString();
+		return new ResponseData(201, new JSONObject(response).toString());
 	}
 }

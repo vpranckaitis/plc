@@ -7,8 +7,10 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URLDecoder;
 
+import org.omg.CORBA.UNKNOWN;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.simpleframework.http.Status;
 import org.simpleframework.http.core.Container;
 import org.simpleframework.http.core.ContainerServer;
 import org.simpleframework.transport.connect.Connection;
@@ -70,10 +72,16 @@ public class Server implements Closeable {
 					default:
 						method = HttpMethod.UNKNOWN;
 					}
-					String path = URLDecoder.decode(request.getPath().getPath(), "UTF-8");
-					String query = URLDecoder.decode(request.getQuery().toString(), "UTF-8");
-					String content = request.getContent();
-					body.print(notifyListener(method, path, query, content));
+					
+					if (method != HttpMethod.UNKNOWN) {
+						String path = URLDecoder.decode(request.getPath().getPath(), "UTF-8");
+						String query = URLDecoder.decode(request.getQuery().toString(), "UTF-8");
+						String content = request.getContent();
+						ResponseData data = notifyListener(method, path, query, content);
+						response.setCode(data.getStatus());
+						response.setStatus(Status.getStatus(data.getStatus()));
+						body.print(data.getResponseBody());
+					}
 				} else {
 					body.println("Server won't process any requests");
 				}
@@ -83,12 +91,12 @@ public class Server implements Closeable {
 			}
 		}
 		
-		public String notifyListener(HttpMethod method, String uri, String query, String content) {
+		public ResponseData notifyListener(HttpMethod method, String uri, String query, String content) {
 			if (mRequestListener != null) {
 				return mRequestListener.handleRequest(method, uri,
 						query, content);
 			} 
-			return "";
+			return null;
 		}
 		
 	}

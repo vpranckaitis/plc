@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
+import lt.vpranckaitis.plc.transport.ResponseData;
 
 public class UpdatePositionRequest extends PositionRequest {
 
@@ -19,14 +20,15 @@ public class UpdatePositionRequest extends PositionRequest {
 	}
 
 	@Override
-	public String getResponse() {
-		Map<String, String> response = new HashMap<String, String>();
+	public ResponseData getResponse() {
+		ResponseData responseData = new ResponseData();
+		responseData.setResponseBody(new JSONObject().toString());
 		if (getPositionDatabase().updatePosition(mKey,mLatitude, mLongitude)) {
-			response.put("status", "200");
+			responseData.setStatus(200);
 		} else {
-			response.put("status", "404");
+			responseData.setStatus(401);
 		}
-		return new JSONObject(response).toString();
+		return responseData;
 	}
 
 	@Override

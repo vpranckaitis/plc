@@ -1,6 +1,7 @@
 package lt.vpranckaitis.plc.request;
 
 import lt.vpranckaitis.plc.database.PositionsDatabaseAdapter;
+import lt.vpranckaitis.plc.transport.ResponseData;
 
 public abstract class PositionRequest implements Request {
 
@@ -13,7 +14,7 @@ public abstract class PositionRequest implements Request {
 	}
 	
 	@Override
-	public abstract String getResponse();
+	public abstract ResponseData getResponse();
 	
 	protected PositionsDatabaseAdapter getPositionDatabase() {
 		return mPositionDatabase;

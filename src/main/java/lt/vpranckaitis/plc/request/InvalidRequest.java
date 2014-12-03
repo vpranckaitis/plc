@@ -3,16 +3,16 @@ package lt.vpranckaitis.plc.request;
 import java.util.HashMap;
 import java.util.Map;
 
+import lt.vpranckaitis.plc.transport.ResponseData;
+
 import org.json.JSONObject;
 
 
 public class InvalidRequest implements Request {
 
 	@Override
-	public String getResponse() {
-		Map<String, String> response = new HashMap<String, String>();
-		response.put("status", "400");
-		return new JSONObject(response).toString();
+	public ResponseData getResponse() {
+		return new ResponseData(400,  new JSONObject().toString());
 	}
 
 	@Override
