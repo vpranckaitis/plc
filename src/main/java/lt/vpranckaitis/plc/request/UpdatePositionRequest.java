@@ -26,7 +26,7 @@ public class UpdatePositionRequest extends PositionRequest {
 		if (getPositionDatabase().updatePosition(mKey,mLatitude, mLongitude)) {
 			responseData.setStatus(200);
 		} else {
-			responseData.setStatus(401);
+			responseData.setStatus(404);
 		}
 		return responseData;
 	}
